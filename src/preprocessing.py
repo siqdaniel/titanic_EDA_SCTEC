@@ -1,14 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns 
+from pathlib import Path
 
-#Load dos Dados
 df = pd.read_csv("data/raw/titanic_dataset.csv")
-
-#Analise Geral do Data frame
-print(df.head())
-print (df.info())
-print (df.isnull().sum())
 
 #Remocao de Colunas com valores nulos excessivos ou sem valor preditivo
 df = df.drop(["Cabin", "PassengerId", "Name", "Ticket"], axis=1)
@@ -19,6 +14,14 @@ df["Embarked"] = df["Embarked"].fillna(df["Embarked"].mode()[0])
 print(df["Embarked"].isnull().sum())
 
 
+#Tratamento dos nulos da variavel Age pela imputacao da mediana de
+#Pclass + sex:
 
+df["Age"] = df.groupby(["Pclass", "Sex"])["Age"].transform(
+    lambda x: x.fillna(x.median())
+)
 
+df["Age"].isnull().sum()
+df["Age"].describe()
 
+print(df.info())
