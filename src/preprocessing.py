@@ -27,7 +27,7 @@ df["Age"] = df.groupby(["Pclass", "Sex"])["Age"].transform(
 df["Age"].isnull().sum()
 df["Age"].describe()
 
-#Criacao de AgeGroup
+#Criacao de AgeGroup para cetagorizar por idade:
 
 def categorizar_idade(idade):
     if idade <= 12:
@@ -42,4 +42,14 @@ def categorizar_idade(idade):
 df["AgeGroup"] = df["Age"].apply(categorizar_idade)
 
 
-print (df.head())
+# INSIGHTS: 
+
+#Taxa Geral de Sobrevivencia: 
+print(  int(df["Survived"].mean() * 100) )
+
+#Hipotese de que mulheres tiveram maior taxa de sobrevivencia:
+print(df.groupby("Sex")["Survived"].mean() * 100)
+
+#proporção real dentro do grupo.
+
+print(df.groupby("Sex")["Survived"].value_counts(normalize=True))
