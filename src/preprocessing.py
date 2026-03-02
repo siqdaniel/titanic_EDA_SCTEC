@@ -3,7 +3,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns 
 from pathlib import Path
 
+
+#load dos dados
 df = pd.read_csv("data/raw/titanic_dataset.csv")
+
+#Tratamento e Limpeza dos Dados
 
 #Remocao de Colunas com valores nulos excessivos ou sem valor preditivo
 df = df.drop(["Cabin", "PassengerId", "Name", "Ticket"], axis=1)
@@ -20,8 +24,22 @@ print(df["Embarked"].isnull().sum())
 df["Age"] = df.groupby(["Pclass", "Sex"])["Age"].transform(
     lambda x: x.fillna(x.median())
 )
-
 df["Age"].isnull().sum()
 df["Age"].describe()
 
-print(df.info())
+#Criacao de AgeGroup
+
+def categorizar_idade(idade):
+    if idade <= 12:
+        return "Crianca"
+    elif idade <= 17:
+        return "Adolescente"
+    elif idade <= 59:
+        return "Adulto"
+    else:
+        return "Idoso"
+
+df["AgeGroup"] = df["Age"].apply(categorizar_idade)
+
+
+print (df.head())
