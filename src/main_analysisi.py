@@ -1,7 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns 
-from pathlib import Path
+
+
 
 
 #load dos dados
@@ -52,7 +53,7 @@ survival_by_sex = (df.groupby("Sex")["Survived"].mean() * 100)
 
 #proporção real dentro do grupo.
 
-(df.groupby("Sex")["Survived"].value_counts(normalize=True))
+(df.groupby("Sex")["Survived"].value_counts(normalize=True)) #Nao Implementado
 
 # Hipotese de que passageiros da primeira classe tiveram maior chance de sobrevivencia:
 survival_by_class = (df.groupby("Pclass")["Survived"].mean() *100)
@@ -60,7 +61,7 @@ survival_by_class = (df.groupby("Pclass")["Survived"].mean() *100)
 # Analise da taxa de sobrevivencia por idade:
 (df.groupby("AgeGroup")["Survived"].mean() * 100)
 
-#Analise da taxa de sobrevivencia pela taxa de embarque: 
+#Analise da taxa de sobrevivencia pela tarifa de embarque: 
 (df.groupby("Survived")["Fare"].mean())
 
 
@@ -75,7 +76,9 @@ sns.barplot(
 
 plt.ylabel("Taxa de Sobrevivência (%)")
 plt.title("Taxa de Sobrevivência por Sexo")
+plt.savefig("outputs/figures/survival_by_sex.png", dpi=300, bbox_inches="tight")
 plt.show()
+plt.close()
 
 # SOBREVIVENCIA POR CLASSE:
 
@@ -86,15 +89,21 @@ sns.barplot(
 
 plt.ylabel("Taxa de Sobrevivência (%)")
 plt.title("Taxa de Sobrevivência por Classe")
+plt.savefig("outputs/figures/survival_by_class.png", dpi=300, bbox_inches="tight")
 plt.show()
-
+plt.close()
 
 
 # Histograma comparativo:
-sns.histplot(data=df, x="Age", hue="Survived", kde=True, bins=30)
-plt.title("Distribuição de Idade por Sobrevivência")
-plt.show()
+fig, ax = plt.subplots(figsize=(8,5))
 
-plt.savefig("outputs/figures/survival_by_sex.png", dpi=300, bbox_inches="tight")
-plt.savefig("outputs/figures/survival_by_class.png", dpi=300, bbox_inches="tight")
+sns.histplot(data=df, x="Age", hue="Survived", kde=True, bins=30, ax=ax)
+
+ax.set_title("Distribuição de Idade por Sobrevivência")
+
+fig.tight_layout()
+fig.savefig("outputs/figures/idade_por_sobrevivencia.png", dpi=300, bbox_inches="tight")
+plt.show()
+plt.close(fig)
+
 
